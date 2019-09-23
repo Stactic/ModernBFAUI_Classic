@@ -1,6 +1,10 @@
 ----------------------------------==≡≡[ NOTES ]≡≡==----------------------------------
 --[[
 CHANGES:
+	1.12 (Stactic)
+		- Added stackable bars support
+		- Updated project hiearchy
+		- Removed duplicate code
 	1.11 (EsreverWoW):
 		-Added free bag space data text on the backpack.
 		-Potential fix for XP bar visibility.
@@ -48,16 +52,16 @@ PERSONAL NOTES:
 
 ------------------==≡≡[ CREATING AND APPLYING SAVED VARIABLES ]≡≡==------------------
 
-print("Battle for Azeroth UI: |cffdedee2Type /bfa to toggle the options menu.")
+print("Modern BFA UI: |cffdedee2Type /bfa to toggle the options menu.")
 local function EnteringWorld()
-	if BFAUI_SavedVars == nil then -- Create Saved Variables:
+	if Modern_BFA_UI_Vars == nil then -- Create Saved Variables:
 		if GetCVar("xpBarText") == "1" then
 			tf = true
 		else
 			tf = false
 		end
-		BFAUI_SavedVars = {}
-		BFAUI_SavedVars["Options"] = {
+		Modern_BFA_UI_Vars = {}
+		Modern_BFA_UI_Vars["Options"] = {
 			["PixelPerfect"] = false,
 			["XPBarText"] = tf,
 			["HideGryphons"] = false,
@@ -72,31 +76,31 @@ local function EnteringWorld()
 		}
 		StaticPopup_Show(WELCOME_POPUP)
 	else -- Apply Saved Variables:
-		if BFAUI_SavedVars.Options.KeybindVisibility.PrimaryBar then
+		if Modern_BFA_UI_Vars.Options.KeybindVisibility.PrimaryBar then
 			PrimaryBarAlpha = 1
 		else
 			PrimaryBarAlpha = 0
 		end
 
-		if BFAUI_SavedVars.Options.KeybindVisibility.BottomLeftBar then
+		if Modern_BFA_UI_Vars.Options.KeybindVisibility.BottomLeftBar then
 			BottomLeftBarAlpha = 1
 		else
 			BottomLeftBarAlpha = 0
 		end
 
-		if BFAUI_SavedVars.Options.KeybindVisibility.BottomRightBar then
+		if Modern_BFA_UI_Vars.Options.KeybindVisibility.BottomRightBar then
 			BottomLeftBarAlpha = 1
 		else
 			BottomLeftBarAlpha = 0
 		end
 
-		if BFAUI_SavedVars.Options.KeybindVisibility.RightBar then
+		if Modern_BFA_UI_Vars.Options.KeybindVisibility.RightBar then
 			RightBarAlpha = 1
 		else
 			RightBarAlpha = 0
 		end
 
-		if BFAUI_SavedVars.Options.KeybindVisibility.RightBar2 then
+		if Modern_BFA_UI_Vars.Options.KeybindVisibility.RightBar2 then
 			RightBar2Alpha = 1
 		else
 			RightBar2Alpha = 0
@@ -132,7 +136,7 @@ SLASH_BFA1 = "/bfa"
 SLASH_BFA2 = "/bfaui"
 
 local function PixelPerfect()
-	if BFAUI_SavedVars.Options.PixelPerfect == true then
+	if Modern_BFA_UI_Vars.Options.PixelPerfect == true then
 		-- enable system button, hide text
 		Advanced_UseUIScale:Disable()
 		Advanced_UIScaleSlider:Disable()
@@ -147,7 +151,7 @@ f:RegisterEvent("PLAYER_ENTERING_WORLD")
 f:SetScript("OnEvent", PixelPerfect)
 
 local function HideGryphons()
-	if BFAUI_SavedVars.Options.HideGryphons == true then
+	if Modern_BFA_UI_Vars.Options.HideGryphons == true then
 		MainMenuBarLeftEndCap:Hide()
 		MainMenuBarRightEndCap:Hide()
 	end
@@ -185,7 +189,7 @@ StaticPopupDialogs["ReloadUI_Popup"] = {
 }
 
 local function SetPixelPerfect(self)
-	if BFAUI_SavedVars.Options.PixelPerfect == true then
+	if Modern_BFA_UI_Vars.Options.PixelPerfect == true then
 		if not InCombatLockdown() then
 			local scale = min(2, max(0.20, 768 / select(2, GetPhysicalScreenSize())))
 			scale = tonumber(string.sub(scale, 0, 5)) -- Fix 8.1/Classic scale bug
@@ -324,7 +328,7 @@ local function Initial_ActionBarPositioning()
 		MultiBarBottomLeftButton1:SetPoint("BOTTOMLEFT", MultiBarBottomLeft, 0, -6)
 
 		-- reposition bottom right actionbar
-		if (BFAUI_SavedVars.Options.StackBars == true) then
+		if (Modern_BFA_UI_Vars.Options.StackBars == true) then
 			MultiBarBottomRight:SetPoint("LEFT", MultiBarBottomLeft, 0, 35)
 			-- MultiBarBottomRightButton7:SetPoint("LEFT", MultiBarBottomRight, 0, -48)
 		else
@@ -342,7 +346,7 @@ local function Initial_ActionBarPositioning()
 		SlidingActionBarTexture0:SetPoint("TOPLEFT", PetActionBarFrame, 1, -5) -- pet bar texture (displayed when bottom left bar is hidden)
 		PetActionButton1:ClearAllPoints()
 
-		if (BFAUI_SavedVars.Options.StackBars == true) then
+		if (Modern_BFA_UI_Vars.Options.StackBars == true) then
 			PetActionButton1:SetPoint("TOPLEFT", PetActionBarFrame, 51, 24)
 		else
 			PetActionButton1:SetPoint("TOP", PetActionBarFrame, "LEFT", 51, 4)
@@ -360,7 +364,6 @@ f:SetScript("OnEvent", Initial_ActionBarPositioning)
 
 
 local function ActivateBar(extraBarShown, stackExtraBar)
-	print("ExtraBarShown ",extraBarShown, ", StackExtraBar ", stackExtraBar)
 	local barWidth, barOffset, gryphonOffset = 0, 0, 0
 	if (extraBarShown == true and stackExtraBar == false) then
 		ActionBarArt:Show()
@@ -378,7 +381,7 @@ local function ActivateBar(extraBarShown, stackExtraBar)
 		gryphonOffset = -264
 	end
 
-	if not BFAUI_SavedVars.Options.HideGryphons or (MainMenuBarLeftEndCap:IsShown() or MainMenuBarRightEndCap:IsShown()) then
+	if not Modern_BFA_UI_Vars.Options.HideGryphons or (MainMenuBarLeftEndCap:IsShown() or MainMenuBarRightEndCap:IsShown()) then
 		MainMenuBarLeftEndCap:ClearAllPoints()
 		MainMenuBarLeftEndCap:SetPoint("LEFT", ActionBarArt, "LEFT", 12, 0)
 		MainMenuBarRightEndCap:ClearAllPoints()
@@ -426,8 +429,7 @@ local function Update_ActionBars()
 		end
 	end
 
-	print(BFAUI_SavedVars.Options.StackBars)
-	ActivateBar(MultiBarBottomRight:IsShown(), BFAUI_SavedVars.Options.StackBars)
+	ActivateBar(MultiBarBottomRight:IsShown(), Modern_BFA_UI_Vars.Options.StackBars)
 
 	-- Fix to show XP bar on load
 	MainMenuBar_UpdateExperienceBars()

@@ -80,22 +80,22 @@
 						getglobal(InnerPanelPixelPerfect:GetName() .. "Text"):SetText("Pixel Perfect Mode |cff606060(requires reload)")
 					</OnLoad>
 					<OnShow>
-						if BFAUI_SavedVars.Options.PixelPerfect == true then
+						if Modern_BFA_UI_Vars.Options.PixelPerfect == true then
 							self:SetChecked(true)
 						end
 					</OnShow>
 					<OnClick>
 						if self:GetChecked() == true then
-							BFAUI_SavedVars.Options.PixelPerfect = true
+							Modern_BFA_UI_Vars.Options.PixelPerfect = true
 						else
-							BFAUI_SavedVars.Options.PixelPerfect = false
+							Modern_BFA_UI_Vars.Options.PixelPerfect = false
 						end
 						StaticPopup_Show("ReloadUI_Popup")
 
 						--[[
 						local IsChecked = self:GetChecked()
 						if IsChecked == true then
-							BFAUI_SavedVars.Options.PixelPerfect = true
+							Modern_BFA_UI_Vars.Options.PixelPerfect = true
 
 							-- set system to true BEFORE setting to false (fixes bug)
 							Advanced_UseUIScale:Click()
@@ -111,7 +111,7 @@
 							Advanced_UseUIScale:Disable()
 							getglobal(Advanced_UseUIScale:GetName() .. "Text"):Show()
 						else
-							BFAUI_SavedVars.Options.PixelPerfect = false
+							Modern_BFA_UI_Vars.Options.PixelPerfect = false
 
 							-- make sure system is enabled so click will work
 							Advanced_UseUIScale:Enable()
@@ -154,7 +154,7 @@
 						getglobal(InnerPanelXPBarText:GetName() .. "Text"):SetText("Experience Bar Text |cff606060(requires reload)")
 					</OnLoad>
 					<OnShow>
-						if BFAUI_SavedVars.Options.XPBarText == true then
+						if Modern_BFA_UI_Vars.Options.XPBarText == true then
 							self:SetChecked(true)
 						end
 					</OnShow>
@@ -162,10 +162,10 @@
 						local IsChecked = self:GetChecked()
 						if IsChecked == true then
 							SetCVar("xpBarText", true)
-							BFAUI_SavedVars.Options.XPBarText = true
+							Modern_BFA_UI_Vars.Options.XPBarText = true
 						else
 							SetCVar("xpBarText", false)
-							BFAUI_SavedVars.Options.XPBarText = false
+							Modern_BFA_UI_Vars.Options.XPBarText = false
 						end
 						StaticPopup_Show("ReloadUI_Popup")
 					</OnClick>
@@ -190,18 +190,18 @@
 						getglobal(InnerPanelHideGryphons:GetName() .. "Text"):SetText("Hide Gryphons")
 					</OnLoad>
 					<OnShow>
-						if BFAUI_SavedVars.Options.HideGryphons == true then
+						if Modern_BFA_UI_Vars.Options.HideGryphons == true then
 							self:SetChecked(true)
 						end
 					</OnShow>
 					<OnClick>
 						local IsChecked = self:GetChecked()
 						if IsChecked == true then
-							BFAUI_SavedVars.Options.HideGryphons = true
+							Modern_BFA_UI_Vars.Options.HideGryphons = true
 							MainMenuBarLeftEndCap:Hide()
 							MainMenuBarRightEndCap:Hide()
 						else
-							BFAUI_SavedVars.Options.HideGryphons = false
+							Modern_BFA_UI_Vars.Options.HideGryphons = false
 							MainMenuBarLeftEndCap:Show()
 							MainMenuBarRightEndCap:Show()
 						end
@@ -225,19 +225,19 @@
 				</Anchors>
 				<Scripts>
 					<OnLoad>
-						getglobal(InnerPanelStackBars:GetName() .. "Text"):SetText("Stack Bars")
+						getglobal(InnerPanelStackBars:GetName() .. "Text"):SetText("Stack Bars |cff606060(requires reload)")
 					</OnLoad>
 					<OnShow>
-						if BFAUI_SavedVars.Options.StackBars == true then
+						if Modern_BFA_UI_Vars.Options.StackBars == true then
 							self:SetChecked(true)
 						end
 					</OnShow>
 					<OnClick>
 						local IsChecked = self:GetChecked()
 						if IsChecked == true then
-							BFAUI_SavedVars.Options.StackBars = true
+							Modern_BFA_UI_Vars.Options.StackBars = true
 						else
-							BFAUI_SavedVars.Options.StackBars = false
+							Modern_BFA_UI_Vars.Options.StackBars = false
 						end
 						StaticPopup_Show("ReloadUI_Popup")
 					</OnClick>
@@ -262,7 +262,7 @@
 						getglobal(InnerPanelKeybindVisibilityPrimaryBar:GetName() .. "Text"):SetText("Primary Bar")
 					</OnLoad>
 					<OnShow>
-						if BFAUI_SavedVars.Options.KeybindVisibility.PrimaryBar == true then
+						if Modern_BFA_UI_Vars.Options.KeybindVisibility.PrimaryBar == true then
 							self:SetChecked(true)
 						end
 					</OnShow>
@@ -270,10 +270,10 @@
 						local IsChecked = self:GetChecked()
 						if IsChecked == true then
 							a = 1
-							BFAUI_SavedVars.Options.KeybindVisibility.PrimaryBar = true
+							Modern_BFA_UI_Vars.Options.KeybindVisibility.PrimaryBar = true
 						else
 							a = 0
-							BFAUI_SavedVars.Options.KeybindVisibility.PrimaryBar = false
+							Modern_BFA_UI_Vars.Options.KeybindVisibility.PrimaryBar = false
 						end
 						for i = 1, 12 do
 							_G["ActionButton" .. i .. "HotKey"]:SetAlpha(a)
@@ -300,7 +300,7 @@
 						getglobal(InnerPanelKeybindVisibilityBottomLeftBar:GetName() .. "Text"):SetText("Bottom Left Bar")
 					</OnLoad>
 					<OnShow>
-						if BFAUI_SavedVars.Options.KeybindVisibility.BottomLeftBar == true then
+						if Modern_BFA_UI_Vars.Options.KeybindVisibility.BottomLeftBar == true then
 							self:SetChecked(true)
 						end
 					</OnShow>
@@ -308,10 +308,10 @@
 						local IsChecked = self:GetChecked()
 						if IsChecked == true then
 							a = 1
-							BFAUI_SavedVars.Options.KeybindVisibility.BottomLeftBar = true
+							Modern_BFA_UI_Vars.Options.KeybindVisibility.BottomLeftBar = true
 						else
 							a = 0
-							BFAUI_SavedVars.Options.KeybindVisibility.BottomLeftBar = false
+							Modern_BFA_UI_Vars.Options.KeybindVisibility.BottomLeftBar = false
 						end
 						for i = 1, 12 do
 							_G["MultiBarBottomLeftButton" .. i .. "HotKey"]:SetAlpha(a)
@@ -338,7 +338,7 @@
 						getglobal(InnerPanelKeybindVisibilityBottomRightBar:GetName() .. "Text"):SetText("Bottom Right Bar")
 					</OnLoad>
 					<OnShow>
-						if BFAUI_SavedVars.Options.KeybindVisibility.BottomRightBar == true then
+						if Modern_BFA_UI_Vars.Options.KeybindVisibility.BottomRightBar == true then
 							self:SetChecked(true)
 						end
 					</OnShow>
@@ -346,10 +346,10 @@
 						local IsChecked = self:GetChecked()
 						if IsChecked == true then
 							a = 1
-							BFAUI_SavedVars.Options.KeybindVisibility.BottomRightBar = true
+							Modern_BFA_UI_Vars.Options.KeybindVisibility.BottomRightBar = true
 						else
 							a = 0
-							BFAUI_SavedVars.Options.KeybindVisibility.BottomRightBar = false
+							Modern_BFA_UI_Vars.Options.KeybindVisibility.BottomRightBar = false
 						end
 						for i = 1, 12 do
 							_G["MultiBarBottomRightButton" .. i .. "HotKey"]:SetAlpha(a)
@@ -376,7 +376,7 @@
 						getglobal(InnerPanelKeybindVisibilityRightBar:GetName() .. "Text"):SetText("Right Bar")
 					</OnLoad>
 					<OnShow>
-						if BFAUI_SavedVars.Options.KeybindVisibility.RightBar == true then
+						if Modern_BFA_UI_Vars.Options.KeybindVisibility.RightBar == true then
 							self:SetChecked(true)
 						end
 					</OnShow>
@@ -384,10 +384,10 @@
 						local IsChecked = self:GetChecked()
 						if IsChecked == true then
 							a = 1
-							BFAUI_SavedVars.Options.KeybindVisibility.RightBar = true
+							Modern_BFA_UI_Vars.Options.KeybindVisibility.RightBar = true
 						else
 							a = 0
-							BFAUI_SavedVars.Options.KeybindVisibility.RightBar = false
+							Modern_BFA_UI_Vars.Options.KeybindVisibility.RightBar = false
 						end
 						for i = 1, 12 do
 							_G["MultiBarRightButton" .. i .. "HotKey"]:SetAlpha(a)
@@ -414,7 +414,7 @@
 						getglobal(InnerPanelKeybindVisibilityRightBar2:GetName() .. "Text"):SetText("Right Bar 2")
 					</OnLoad>
 					<OnShow>
-						if BFAUI_SavedVars.Options.KeybindVisibility.RightBar2 == true then
+						if Modern_BFA_UI_Vars.Options.KeybindVisibility.RightBar2 == true then
 							self:SetChecked(true)
 						end
 					</OnShow>
@@ -422,10 +422,10 @@
 						local IsChecked = self:GetChecked()
 						if IsChecked == true then
 							a = 1
-							BFAUI_SavedVars.Options.KeybindVisibility.RightBar2 = true
+							Modern_BFA_UI_Vars.Options.KeybindVisibility.RightBar2 = true
 						else
 							a = 0
-							BFAUI_SavedVars.Options.KeybindVisibility.RightBar2 = false
+							Modern_BFA_UI_Vars.Options.KeybindVisibility.RightBar2 = false
 						end
 						for i = 1, 12 do
 							_G["MultiBarLeftButton" .. i .. "HotKey"]:SetAlpha(a)

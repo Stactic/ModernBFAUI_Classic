@@ -1,9 +1,9 @@
 ## Interface: 11302
-## Author: Sèbastían, Es (EsreverWoW)
+## Author: Tuomo, Stamblewski
 ## Version: 1.11
-## Title: Battle for Azeroth |cff69ccf0UI
-## Notes: A Battle for Azeroth inspired User Interface
-## SavedVariables: BFAUI_SavedVars
+## Title: Modern BFA UI
+## Notes: A Battle for Azeroth inspired UI
+## SavedVariables: Modern_BFA_UI_Vars
 
 core.lua
 artFrames.xml
