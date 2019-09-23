@@ -349,55 +349,30 @@ local f = CreateFrame("Frame")
 f:RegisterEvent("PLAYER_LOGIN")
 f:SetScript("OnEvent", Initial_ActionBarPositioning)
 
-local function ActivateLongBar()
-	ActionBarArt:Show()
-	ActionBarArtSmall:Hide()
 
-	if not BFAUI_SavedVars.Options.HideGryphons or (MainMenuBarLeftEndCap:IsShown() or MainMenuBarRightEndCap:IsShown()) then
-		MainMenuBarLeftEndCap:ClearAllPoints()
-		MainMenuBarLeftEndCap:SetPoint("LEFT", ActionBarArt, "LEFT", 12, 0)
-		MainMenuBarRightEndCap:ClearAllPoints()
-		MainMenuBarRightEndCap:SetPoint("RIGHT", ActionBarArt, "RIGHT", -12, 0)
+local function ActivateBar(extraBarShown)
+	local barWidth, barOffset, gryphonOffset = 0, 0, 0
+	if (extraBarShown == true) then
+		ActionBarArt:Show()
+		ActionBarArtSmall:Hide()
+
+		barWidth = 798
+		barOffset = 110
+		gryphonOffset = -12
 	else
-		MainMenuBarLeftEndCap:Hide()
-		MainMenuBarRightEndCap:Hide()
+		ActionBarArt:Hide()
+		ActionBarArtSmall:Show()
+
+		barWidth = 542
+		barOffset = 237
+		gryphonOffset = -264
 	end
-
-	if not InCombatLockdown() then
-		-- arrows and page number
-		ActionBarUpButton:SetPoint("CENTER", MainMenuBarArtFrame, "TOPLEFT", 521, -23)
-		ActionBarDownButton:SetPoint("CENTER", MainMenuBarArtFrame, "TOPLEFT", 521, -42)
-		MainMenuBarPageNumber:SetPoint("CENTER", MainMenuBarArtFrame, 28, -5)
-
-		-- exp bar sizing and positioning
-		MainMenuExpBar:SetSize(798, 10)
-		MainMenuExpBar:ClearAllPoints()
-		MainMenuExpBar:SetPoint("BOTTOM", UIParent, 0, 0)
-
-		-- reposition ALL actionbars (right bars not affected)
-		MainMenuBar:SetPoint("BOTTOM", UIParent, 110, 11)
-
-		-- xp bar background (the one I made)
-		XPBarBackground:SetSize(798, 10)
-		XPBarBackground:SetPoint("BOTTOM", MainMenuBar, -111, -10)
-
-		--[[[
-		if ExhaustionTick:IsShown() then
-			ExhaustionTick_OnEvent(ExhaustionTick, "UPDATE_EXHAUSTION") -- Blizzard function, updates exhaustion tick position on XP bar resize
-		end
-		--]]
-	end
-end
-
-local function ActivateShortBar()
-	ActionBarArt:Hide()
-	ActionBarArtSmall:Show()
 
 	if not BFAUI_SavedVars.Options.HideGryphons or (MainMenuBarLeftEndCap:IsShown() or MainMenuBarRightEndCap:IsShown()) then
 		MainMenuBarLeftEndCap:ClearAllPoints()
 		MainMenuBarLeftEndCap:SetPoint("LEFT", ActionBarArt, "LEFT", 12, 0)
 		MainMenuBarRightEndCap:ClearAllPoints()
-		MainMenuBarRightEndCap:SetPoint("RIGHT", ActionBarArt, "RIGHT", -264, 0)
+		MainMenuBarRightEndCap:SetPoint("RIGHT", ActionBarArt, "RIGHT", gryphonOffset, 0)
 	else
 		MainMenuBarLeftEndCap:Hide()
 		MainMenuBarRightEndCap:Hide()
@@ -410,18 +385,18 @@ local function ActivateShortBar()
 		MainMenuBarPageNumber:SetPoint("CENTER", MainMenuBarArtFrame, 29, -5)
 
 		-- exp bar sizing and positioning
-		MainMenuExpBar:SetSize(542, 10)
+		MainMenuExpBar:SetSize(barWidth, 10)
 		MainMenuExpBar:ClearAllPoints()
 		MainMenuExpBar:SetPoint("BOTTOM", UIParent, 0, 0)
 
 		-- reposition ALL actionbars (right bars not affected)
-		MainMenuBar:SetPoint("BOTTOM", UIParent, 237, 11)
+		MainMenuBar:SetPoint("BOTTOM", UIParent, barOffset, 11) -- 237
 
 		-- xp bar background (the one I made)
-		XPBarBackground:SetSize(542, 10)
-		XPBarBackground:SetPoint("BOTTOM", MainMenuBar, -237, -10)
+		XPBarBackground:SetSize(barWidth, 10)
+		XPBarBackground:SetPoint("BOTTOM", MainMenuBar, -barOffset, -10) -- -237
 
-		--[[
+		--[[[
 		if ExhaustionTick:IsShown() then
 			ExhaustionTick_OnEvent(ExhaustionTick, "UPDATE_EXHAUSTION") -- Blizzard function, updates exhaustion tick position on XP bar resize
 		end
@@ -441,12 +416,7 @@ local function Update_ActionBars()
 		end
 	end
 
-	-- Bottom Right Bar: (needs to be run in or out of combat, this is for the art when exiting vehicles in combat)
-	if MultiBarBottomRight:IsShown() == true then
-		ActivateLongBar()
-	else
-		ActivateShortBar()
-	end
+	ActivateBar(MultiBarBottomRight:IsShown())
 
 	-- Fix to show XP bar on load
 	MainMenuBar_UpdateExperienceBars()
