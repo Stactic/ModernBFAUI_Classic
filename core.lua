@@ -1,55 +1,3 @@
-----------------------------------==≡≡[ NOTES ]≡≡==----------------------------------
---[[
-CHANGES:
-	1.12 (Stactic)
-		- Added stackable bars support
-		- Updated project hiearchy
-		- Removed duplicate code
-	1.11 (EsreverWoW):
-		-Added free bag space data text on the backpack.
-		-Potential fix for XP bar visibility.
-	1.10 (EsreverWoW):
-		-Updated art assets to match those found in BfA today.
-		-Added an option and handling for hiding gryphons on the main action bar.
-	1.09 (EsreverWoW):
-		-Fixed an issue where the strata was too low for the XP bar.
-	1.08 (EsreverWoW):
-		-Changed the MicroMenuArt texture to have a shorter width since we didn't need three of the slots.
-		-Fixed the QuestLogMicroButton placement/sizing when playing on a character below level 10.
-		-Small change to pixel perfect scaling to correct for a bug present in 8.1/Classic.
-		-Cleanup and refactoring.
-	1.07 (EsreverWoW):
-		-Modified to restore the BfA UI to WoW Classic.
-		-Removed code irrelevant to WoW Classic.
-	1.06:
-		-The Objective Tracker should now position itself correctly underneath the Blizzard Arena Frames
-		-The Vehicle Seat Indicator should now position itself correctly when the Objective Tracker or Arena Frames are visible
-		-Pixel Perfect Mode now works as intended (minor bugs fixed)
-		-Refactored code
-	1.05:
-		-Enabling 'Right Bar' while 'Right Bar 2' is disabled, will now enlarge and reposition the 'Right Bar'
-		-Fixed visual issue where the Artifact bar would move around randomly during battlegrounds and other events
-		-Fixed stance issue positioning for single stance bar when the Bottom Left Bar is hidden (Thanks to Ilraei for pointing it out)
-		-Fixed issue where the Exhaustion Tick would not reposition correctly on experience bar resize
-		-Fixed issue where the Vehicle Seat Indicator would appear on top the Objective/Quest frame
-		-Refactored code
-	1.04:
-		-Fixed visual issue when unequipping artifact weapon at max level
-		-Fixed visual issue when logging in at max level with no artifact weapon equipped
-	1.03:
-		-Fixed Pet ActionBar positioning and art for when the Bottom Left ActionBar is hidden
-		-Fixed [ADDON_ACTION_BLOCKED] errors. (The AddOn will now only call protected functions when out of combat)
-	1.02:
-		-Recreated Pixel Perfect Mode, now works on resolutions higher than 1080p
-	1.01:
-		-Fixed 98-109 issue where the artifact bar would appear on UPDATE_EXHAUSTION event
-
-PERSONAL NOTES:
-		C_Timer.After(3, function() -- 3 second delay
-			-- do something
-		end)
---]]
-
 ------------------==≡≡[ CREATING AND APPLYING SAVED VARIABLES ]≡≡==------------------
 
 print("Modern BFA UI: |cffdedee2Type /bfa to toggle the options menu.")
@@ -74,7 +22,6 @@ local function EnteringWorld()
 				["RightBar2"] = true,
 			},
 		}
-		StaticPopup_Show(WELCOME_POPUP)
 	else -- Apply Saved Variables:
 		if Modern_BFA_UI_Vars.Options.KeybindVisibility.PrimaryBar then
 			PrimaryBarAlpha = 1
@@ -122,7 +69,6 @@ f:RegisterEvent("PLAYER_ENTERING_WORLD")
 f:SetScript("OnEvent", EnteringWorld)
 
 ------------------------------==≡≡[ OPTIONS FRAME ]≡≡==------------------------------
-
 SlashCmdList.BFA = function()
 	if BFAOptionsFrame:IsShown() then
 		BFAOptionsFrame:Hide()
@@ -160,20 +106,6 @@ end
 local f = CreateFrame("Frame")
 f:RegisterEvent("PLAYER_ENTERING_WORLD")
 f:SetScript("OnEvent", HideGryphons)
-
--- reference :http://wowwiki.wikia.com/wiki/Creating_simple_pop-up_dialog_boxes
-StaticPopupDialogs.WELCOME_POPUP = {
-	text = "Welcome to Battle for Azeroth UI",
-	button1 = "Continue to options",
-	OnAccept = function()
-		BFAOptionsFrame:Show()
-		PlaySound(88) -- GAMEDIALOGOPEN
-	end,
-	timeout = 0,
-	whileDead = true,
-	hideOnEscape = true,
-	preferredIndex = 3, -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
-}
 
 StaticPopupDialogs["ReloadUI_Popup"] = {
 	text = "Reload your UI to apply changes?",
@@ -311,6 +243,7 @@ end
 local function MoveMicroButtons_Hook(...)
 	MoveMicroButtonsToBottomRight()
 end
+
 hooksecurefunc("MoveMicroButtons", MoveMicroButtons_Hook)
 hooksecurefunc("UpdateMicroButtons", MoveMicroButtons_Hook)
 hooksecurefunc("MainMenuBarVehicleLeaveButton_Update", MoveMicroButtons_Hook)
@@ -328,16 +261,15 @@ local function Initial_ActionBarPositioning()
 		MultiBarBottomLeftButton1:SetPoint("BOTTOMLEFT", MultiBarBottomLeft, 0, -6)
 
 		-- reposition bottom right actionbar
+		MultiBarBottomRight:ClearAllPoints()
+		MultiBarBottomRightButton7:ClearAllPoints()
 		if (Modern_BFA_UI_Vars.Options.StackBars == true) then
 			MultiBarBottomRight:SetPoint("LEFT", MultiBarBottomLeft, 0, 35)
-			-- MultiBarBottomRightButton7:SetPoint("LEFT", MultiBarBottomRight, 0, -48)
+			MultiBarBottomRightButton7:SetPoint("LEFT", MultiBarBottomRight, 252, 0)
 		else
-			MultiBarBottomRight:SetPoint("LEFT", MultiBarBottomLeft, "RIGHT", 43, -6)		
+			MultiBarBottomRight:SetPoint("LEFT", MultiBarBottomLeft, "RIGHT", 43, -6)
 			MultiBarBottomRightButton7:SetPoint("LEFT", MultiBarBottomRight, 0, -48)
 		end
-
-		-- reposition right bottom
-		-- MultiBarLeftButton1:SetPoint("TOPRIGHT", MultiBarLeft, 41, 11)
 
 		-- reposition bags
 		MainMenuBarBackpackButton:SetPoint("BOTTOMRIGHT", UIParent, -5, 47)
@@ -403,11 +335,11 @@ local function ActivateBar(extraBarShown, stackExtraBar)
 		MainMenuExpBar:SetPoint("BOTTOM", UIParent, 0, 0)
 
 		-- reposition ALL actionbars (right bars not affected)
-		MainMenuBar:SetPoint("BOTTOM", UIParent, barOffset, 11) -- 237
+		MainMenuBar:SetPoint("BOTTOM", UIParent, barOffset, 11)
 
 		-- xp bar background (the one I made)
 		XPBarBackground:SetSize(barWidth, 10)
-		XPBarBackground:SetPoint("BOTTOM", MainMenuBar, -barOffset, -10) -- -237
+		XPBarBackground:SetPoint("BOTTOM", MainMenuBar, -barOffset, -10)
 
 		--[[[
 		if ExhaustionTick:IsShown() then
@@ -430,7 +362,6 @@ local function Update_ActionBars()
 	end
 
 	ActivateBar(MultiBarBottomRight:IsShown(), Modern_BFA_UI_Vars.Options.StackBars)
-
 	-- Fix to show XP bar on load
 	MainMenuBar_UpdateExperienceBars()
 end
@@ -468,8 +399,7 @@ local function PlayerLeftCombat()
 	InterfaceOptionsActionBarsPanelRight:Enable()
 	InterfaceOptionsActionBarsPanelRightTwo:Enable()
 
-	Initial_ActionBarPositioning()
-	Update_ActionBars()
+	Modern_BFA_UI_ForceUpdateActionBars()
 end
 
 local f = CreateFrame("Frame")
@@ -510,22 +440,9 @@ for i = 0, 3 do -- for loop, hides MainMenuBarTexture (0-3)
 	_G["MainMenuBarTexture" .. i]:Hide()
 end
 
--------------------------------==≡≡[ RECYCLE BIN ]≡≡==-------------------------------
 
---[[
-t = {
-	"PlayerFrameTexture",
-	"TargetFrameTextureFrameTexture",
-	-- "MinimapBorder",
-	-- "MinimapBorderTop",
-	"ExhaustionTickNormal",
-	"MicroMenuArtTexture",
-}
-
-for _, v in ipairs(t) do
-	_G[v]:SetVertexColor(0.4, 0.4, 0.4)
+----------- GLOBAL ----------------
+function Modern_BFA_UI_ForceUpdateActionBars()
+	Initial_ActionBarPositioning()
+	Update_ActionBars()
 end
-
--- local TimeBorder = TimeManagerClockButton:GetRegions()
--- TimeBorder:SetVertexColor(0.3, 0.3, 0.3)
---]]
