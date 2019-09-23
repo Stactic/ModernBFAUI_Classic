@@ -61,6 +61,7 @@ local function EnteringWorld()
 			["PixelPerfect"] = false,
 			["XPBarText"] = tf,
 			["HideGryphons"] = false,
+			["StackBars"] = false,
 			["KeybindVisibility"] = {
 				["PrimaryBar"] = true,
 				["BottomLeftBar"] = true,
@@ -323,10 +324,13 @@ local function Initial_ActionBarPositioning()
 		MultiBarBottomLeftButton1:SetPoint("BOTTOMLEFT", MultiBarBottomLeft, 0, -6)
 
 		-- reposition bottom right actionbar
-		MultiBarBottomRight:SetPoint("LEFT", MultiBarBottomLeft, "RIGHT", 43, -6)
-
-		-- reposition second half of top right bar, underneath
-		MultiBarBottomRightButton7:SetPoint("LEFT", MultiBarBottomRight, 0, -48)
+		if (BFAUI_SavedVars.Options.StackBars == true) then
+			MultiBarBottomRight:SetPoint("LEFT", MultiBarBottomLeft, 0, 35)
+			-- MultiBarBottomRightButton7:SetPoint("LEFT", MultiBarBottomRight, 0, -48)
+		else
+			MultiBarBottomRight:SetPoint("LEFT", MultiBarBottomLeft, "RIGHT", 43, -6)		
+			MultiBarBottomRightButton7:SetPoint("LEFT", MultiBarBottomRight, 0, -48)
+		end
 
 		-- reposition right bottom
 		-- MultiBarLeftButton1:SetPoint("TOPRIGHT", MultiBarLeft, 41, 11)
@@ -337,7 +341,12 @@ local function Initial_ActionBarPositioning()
 		-- reposition pet actionbuttons
 		SlidingActionBarTexture0:SetPoint("TOPLEFT", PetActionBarFrame, 1, -5) -- pet bar texture (displayed when bottom left bar is hidden)
 		PetActionButton1:ClearAllPoints()
-		PetActionButton1:SetPoint("TOP", PetActionBarFrame, "LEFT", 51, 4)
+
+		if (BFAUI_SavedVars.Options.StackBars == true) then
+			PetActionButton1:SetPoint("TOPLEFT", PetActionBarFrame, 51, 24)
+		else
+			PetActionButton1:SetPoint("TOP", PetActionBarFrame, "LEFT", 51, 4)
+		end
 
 		-- stance buttons
 		StanceBarLeft:SetPoint("BOTTOMLEFT", StanceBarFrame, 0, -5) -- stance bar texture for when Bottom Left Bar is hidden
@@ -350,9 +359,10 @@ f:RegisterEvent("PLAYER_LOGIN")
 f:SetScript("OnEvent", Initial_ActionBarPositioning)
 
 
-local function ActivateBar(extraBarShown)
+local function ActivateBar(extraBarShown, stackExtraBar)
+	print("ExtraBarShown ",extraBarShown, ", StackExtraBar ", stackExtraBar)
 	local barWidth, barOffset, gryphonOffset = 0, 0, 0
-	if (extraBarShown == true) then
+	if (extraBarShown == true and stackExtraBar == false) then
 		ActionBarArt:Show()
 		ActionBarArtSmall:Hide()
 
@@ -416,7 +426,8 @@ local function Update_ActionBars()
 		end
 	end
 
-	ActivateBar(MultiBarBottomRight:IsShown())
+	print(BFAUI_SavedVars.Options.StackBars)
+	ActivateBar(MultiBarBottomRight:IsShown(), BFAUI_SavedVars.Options.StackBars)
 
 	-- Fix to show XP bar on load
 	MainMenuBar_UpdateExperienceBars()

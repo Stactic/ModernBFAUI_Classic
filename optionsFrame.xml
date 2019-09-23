@@ -74,12 +74,12 @@
 			<Anchors>
 				<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="$parent">
 					<Offset>
-						<AbsDimension x="22" y="-40"/>
+						<AbsDimension x="22" y="-25"/>
 					</Offset>
 				</Anchor>
 				<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parent">
 					<Offset>
-						<AbsDimension x="22" y="50"/>
+						<AbsDimension x="22" y="40"/>
 					</Offset>
 				</Anchor>
 				<Anchor point="RIGHT">

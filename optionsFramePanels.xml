@@ -38,7 +38,7 @@
 					<Anchors>
 						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parentSubText">
 							<Offset>
-								<AbsDimension y="-106" />
+								<AbsDimension y="-120" />
 							</Offset>
 						</Anchor>
 					</Anchors>
@@ -53,7 +53,7 @@
 					<Anchors>
 						<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parentKeybindVisibilityTitle">
 							<Offset>
-								<AbsDimension y="-142" />
+								<AbsDimension y="-152" />
 							</Offset>
 						</Anchor>
 						<Anchor point="BOTTOMRIGHT">
@@ -213,12 +213,47 @@
 					<OnLeave function="GameTooltip_Hide"/>
 				</Scripts>
 			</CheckButton>
+			
+			<!-- BREAKER -->
+			<CheckButton name="$parentStackBars" inherits="InterfaceOptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentHideGryphons" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension y="-3" />
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						getglobal(InnerPanelStackBars:GetName() .. "Text"):SetText("Stack Bars")
+					</OnLoad>
+					<OnShow>
+						if BFAUI_SavedVars.Options.StackBars == true then
+							self:SetChecked(true)
+						end
+					</OnShow>
+					<OnClick>
+						local IsChecked = self:GetChecked()
+						if IsChecked == true then
+							BFAUI_SavedVars.Options.StackBars = true
+						else
+							BFAUI_SavedVars.Options.StackBars = false
+						end
+						StaticPopup_Show("ReloadUI_Popup")
+					</OnClick>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+						GameTooltip:SetText("Stack extra bars.")
+					</OnEnter>
+					<OnLeave function="GameTooltip_Hide"/>
+				</Scripts>
+			</CheckButton>
 			<!-- BREAKER -->
 			<CheckButton name="$parentKeybindVisibilityPrimaryBar" inherits="InterfaceOptionsCheckButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="$parentKeybindVisibilityTitle" relativePoint="BOTTOMLEFT">
 						<Offset>
-							<AbsDimension y="10" />
+							<AbsDimension y="15" />
 						</Offset>
 					</Anchor>
 				</Anchors>
